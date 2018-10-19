@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { View, ImageBackground, Text } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import { View, ImageBackground, Text, Image } from 'react-native';
+import MapView, { Marker, Circle } from 'react-native-maps';
 import { Button, Toast } from 'native-base';
 import Expo from 'expo';
 import axios from 'axios';
 
 // import style
 import styles from '../style/MapScreenStyle';
+
+// global variable
+var i = 0;
 
 export default class MapScreen extends Component {
 
@@ -17,8 +20,7 @@ export default class MapScreen extends Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
         },
-        content: null,
-        showToas: false
+        content: null
     }
 
     componentWillMount = () => {
@@ -31,11 +33,12 @@ export default class MapScreen extends Component {
                     latitudeDelta: 0,
                     longitudeDelta: 0,
                 },
-                content:
+                content: [
                     <Marker
                         coordinate={coords}
                         title='Your location'
-                    />
+                        key={++i}
+                    />]
             });
         });
     }
@@ -47,7 +50,6 @@ export default class MapScreen extends Component {
 
                     {/* The map view */}
                     <MapView
-                        onUserLocationChange={this.onChangeLocation}
                         region={this.state.region}
                         style={{flex: 5}}
                     >
@@ -92,11 +94,24 @@ export default class MapScreen extends Component {
             x: this.state.region.longitude,
             y: this.state.region.latitude
         }).then(res => {
-            console.log(res.status);
             if (res.status === 200) {
                 console.log('Report was sent successfully');
+                Toast.show({
+                    text: 'The report was successfully sent'
+                });
+                this.setState({
+                    content: [...this.state.content,
+                        <Image
+                            source={require('../img/icon.png')}
+                            style={{height: 20, width: 20}}
+                            key={++i}
+                        />
+                    ]
+                });
             } else {
-                console.log('Report was not sent');
+                Toast.show({
+                    text: 'The report was not sent'
+                });
             }
         }).catch(err => {
             console.error(err);

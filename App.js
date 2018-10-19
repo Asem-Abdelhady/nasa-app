@@ -3,7 +3,7 @@ import { StatusBar, View } from 'react-native';
 import {
   createStackNavigator,
 } from 'react-navigation';
-import { Container } from 'native-base';
+import { Root } from 'native-base';
 
 // importing screens
 import HomeScreen from './assets/components/HomeScreen';
@@ -16,7 +16,7 @@ const RootStack = createStackNavigator({
   Map: { screen: MapScreen },
   Instruction: { screen: InstructionScreen }
 }, {
-  initialRouteName: 'Map',
+  initialRouteName: 'Home',
   headerMode: 'none'
 });
 
@@ -32,7 +32,7 @@ export default class App extends Component{
 
   render () {
     return (
-      <Container style={{flex: 1, flexDirection: 'column'}}>
+      <Root>
 
         {/* The top nav bar */}
         <View style={{height: StatusBar.currentHeight, backgroundColor: '#303f9f'}}></View>
@@ -40,7 +40,7 @@ export default class App extends Component{
         {/* The main content */}
         <RootStack />
 
-      </Container>
+      </Root>
     );
   }
 }
